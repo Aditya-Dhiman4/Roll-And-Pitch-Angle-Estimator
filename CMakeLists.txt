@@ -5,4 +5,4 @@
 cmake_minimum_required(VERSION 3.16)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(imu-test-1)
+project(IMU_HAL)

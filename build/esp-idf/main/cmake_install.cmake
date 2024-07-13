@@ -1,8 +1,8 @@
-# Install script for directory: C:/programs/cpp/esp32/imu-test-1/main
+# Install script for directory: C:/programs/cpp/esp32/imu_hal/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/imu-test-1")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/IMU_HAL")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.16)
 
 if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   file(REMOVE_RECURSE
+  "IMU_HAL.bin"
+  "IMU_HAL.map"
   "bootloader\\bootloader.bin"
   "bootloader\\bootloader.elf"
   "bootloader\\bootloader.map"
@@ -14,8 +16,6 @@ if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   "flash_bootloader_args"
   "flash_project_args"
   "flasher_args.json"
-  "imu-test-1.bin"
-  "imu-test-1.map"
   "ldgen_libraries"
   "ldgen_libraries.in"
   "project_elf_src_esp32.c"
