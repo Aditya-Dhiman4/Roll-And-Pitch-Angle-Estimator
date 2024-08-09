@@ -15,7 +15,8 @@
     "idf.pythonBinPathWin": "c:\\esp\\tools\\python_env\\idf5.3_py3.11_env\\Scripts\\python.exe",
     "idf.toolsPathWin": "c:\\esp\\tools",
     "files.associations": {
-        "i2c_master.h": "c"
+        "i2c_master.h": "c",
+        "mpu6050.h": "c"
     },
     "idf.flashType": "UART"
 }

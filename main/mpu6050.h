@@ -38,8 +38,21 @@ typedef struct {
     float gyro_offsets[3];
 } mpu6050_t;
 
+// Initializes the MPU6050 IMU
+// Returns ESP_OK if successful
+// Initializes i2c bus and device and checks if sensor is communicable
 esp_err_t mpu6050_init(mpu6050_t *mpu6050);
+
+// Calibrates the MPU6050 IMU
+// Communicates through the i2c bus to get accelerometer and gyroscope readings
+// Sums accelerometer and gyroscope readings over CALIBRATION_SAMPLES per millisecond
+// and stores the result in the mpu6050_t struct
 void mpu6050_calibrate(mpu6050_t *mpu6050);
+
+// Obtains Calibrated Data from Accelerometer and Gyroscope of the MPU6050 IMU
+// Communicates through the i2c bus to get accelerometer and gyroscope readings
+// subtracts calibration offsets from raw data
+// Returns the calibrated data in the float array
 void mpu6050_read_data(mpu6050_t *mpu6050, float *accel, float *gyro);
 
 #endif // MPU6050_H
