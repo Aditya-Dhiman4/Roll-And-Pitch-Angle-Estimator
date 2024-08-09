@@ -43,30 +43,43 @@ void app_main(void)
 
     float accel[3] = {0}, gyro[3] = {0}, angle_ac[2] = {0};
 
-    float kalman_angle_x = 0, kalman_angle_y = 0;
-    float kalman_uncertaincy_x = 4, kalman_uncertaincy_y = 4;
-    float kalman_out[] = {0, 0};
+    // float kalman_angle_x = 0, kalman_angle_y = 0;
+    // float kalman_uncertaincy_x = 4, kalman_uncertaincy_y = 4;
+    // float kalman_out[] = {0, 0};
+
+    float gyro_dot[2] = {0}, gyro_final[2] = {0};
+    float accel_prev[3] = {0}, gyro_prev[3] = {0}, gyro_c_prev[2] = {0};
 
     while (1) {
         mpu6050_read_data(&mpu6050, accel, gyro);
-
 
         // Calculating angle from accelerometer
         angle_ac[0] = atan2f(accel[1], sqrtf(accel[0]*accel[0] + accel[2]*accel[2])) * (180.0f / M_PI);
         angle_ac[1] = atan2f(-accel[0], sqrtf(accel[1]*accel[1] + accel[2]*accel[2])) * (180.0f / M_PI);
 
         // Kalman Filter Code
-        kalman_filter(kalman_angle_x, kalman_uncertaincy_x, gyro[0] * (180.0f / M_PI), angle_ac[0], kalman_out);
 
-        kalman_angle_x = kalman_out[0];
-        kalman_uncertaincy_x = kalman_out[1];
+        // kalman_filter(kalman_angle_x, kalman_uncertaincy_x, gyro[0] * (180.0f / M_PI), angle_ac[0], kalman_out);
 
-        kalman_filter(kalman_angle_y, kalman_uncertaincy_y, gyro[1] * (180.0f / M_PI), angle_ac[1], kalman_out);
+        // kalman_angle_x = kalman_out[0];
+        // kalman_uncertaincy_x = kalman_out[1];
 
-        kalman_angle_y = kalman_out[0];
-        kalman_uncertaincy_y = kalman_out[1];
+        // kalman_filter(kalman_angle_y, kalman_uncertaincy_y, gyro[1] * (180.0f / M_PI), angle_ac[1], kalman_out);
 
-        ESP_LOGI("MPU6050", "ANGLE - X: %.2f, Y: %.2f", kalman_angle_x, kalman_angle_y);
+        // kalman_angle_y = kalman_out[0];
+        // kalman_uncertaincy_y = kalman_out[1];
+
+        // ESP_LOGI("MPU6050", "ACCEL - X: %.2f m/s^2, Y: %.2f m/s^2, Z: %.2f m/s^2 --- GYRO - X: %.2f rad/s, Y: %.2f rad/s, Z: %.2f rad/s", accel[0], accel[1], accel[2], gyro[0], gyro[1], gyro[2]);
+
+        // Complementary Filter Code
+
+        gyro_dot[0] = gyro[0] + tanf(gyro_final[1]) * (gyro[1] * sinf(gyro_final[0]) + gyro[2] * cosf(gyro_final[0]));
+        gyro_dot[1] = gyro[1] * cosf(gyro_final[0]) - gyro[2] * sinf(gyro_final[1]);
+
+        gyro_final[0] = 0.05f * angle_ac[0] + (1.0f - 0.05f) * (gyro_final[0] + (SAMPLE_TIME_MS / 1000.0f) * gyro_dot[0]);
+        gyro_final[1] = 0.05f * angle_ac[1] + (1.0f - 0.05f) * (gyro_final[1] + (SAMPLE_TIME_MS / 1000.0f) * gyro_dot[1]);
+
+        ESP_LOGI("MPU6050", "ANGLE - X: %.2f, Y: %.2f", gyro_final[0], gyro_final[1]);
 
         vTaskDelay(SAMPLE_TIME_MS / portTICK_PERIOD_MS);
     }
