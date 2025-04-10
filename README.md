@@ -1,7 +1,7 @@
 | Supported Targets | ESP32 |
 | ----------------- | ----- | 
 
-# MPU6050 HAL
+# ROLL AND PITCH ANGLE ESTIMATOR
 
 Note: This has not been tested on the following boards and may not work on these boards:
 
